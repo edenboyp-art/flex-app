@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE Flex Message Sender</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📨 ส่ง Flex Message</h1>
+        
+        <div class="user-info" id="userInfo" style="display:none;">
+            <img id="userPic" src="" alt="Profile">
+            <div>
+                <p><strong id="userName"></strong></p>
+                <p id="userStatus"></p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>หัวข้อข้อความ:</label>
+            <input type="text" id="title" placeholder="ใส่หัวข้อ" value="ข้อความสำคัญ">
+        </div>
+
+        <div class="form-group">
+            <label>เนื้อหา:</label>
+            <textarea id="content" rows="4" placeholder="ใส่เนื้อหา">นี่คือข้อความที่สามารถแชร์ต่อได้!</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>สี Theme:</label>
+            <input type="color" id="color" value="#00B900">
+        </div>
+
+        <button id="sendBtn" class="btn-primary">
+            📤 ส่งข้อความ
+        </button>
+
+        <div id="status" class="status"></div>
+
+        <!-- ตัวอย่าง Flex Message Preview -->
+        <div class="preview">
+            <h3>ตัวอย่างข้อความ:</h3>
+            <div id="flexPreview" class="flex-preview"></div>
+        </div>
+    </div>
+
+    <!-- LINE SDK -->
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

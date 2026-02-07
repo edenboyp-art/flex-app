@@ -7,47 +7,657 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>📨 ส่ง Flex Message</h1>
-        
-        <div class="user-info" id="userInfo" style="display:none;">
-            <img id="userPic" src="" alt="Profile">
-            <div>
-                <p><strong id="userName"></strong></p>
-                <p id="userStatus"></p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>หัวข้อข้อความ:</label>
-            <input type="text" id="title" placeholder="ใส่หัวข้อ" value="ข้อความสำคัญ">
-        </div>
-
-        <div class="form-group">
-            <label>เนื้อหา:</label>
-            <textarea id="content" rows="4" placeholder="ใส่เนื้อหา">นี่คือข้อความที่สามารถแชร์ต่อได้!</textarea>
-        </div>
-
-        <div class="form-group">
-            <label>สี Theme:</label>
-            <input type="color" id="color" value="#00B900">
-        </div>
-
-        <button id="sendBtn" class="btn-primary">
-            📤 ส่งข้อความ
-        </button>
-
-        <div id="status" class="status"></div>
-
-        <!-- ตัวอย่าง Flex Message Preview -->
-        <div class="preview">
-            <h3>ตัวอย่างข้อความ:</h3>
-            <div id="flexPreview" class="flex-preview"></div>
-        </div>
-    </div>
-
-    <!-- LINE SDK -->
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <script src="script.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/versions/2.5.0/sdk.js"></script>
+    <script>
+        async function main() {
+            await liff.init({ liffId: "2009073203-kPdSUtmr" });
+            await liff.shareTargetPicker([{
+                type: 'flex',
+                altText: 'FV Report',
+                contents: 
+{
+  "type": "bubble",
+  "size": "mega",
+  "header": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "𝗖𝗝 𝗙𝗩 (𝗪𝗔𝗩𝗘𝟭)",
+        "weight": "bold",
+        "size": "xl",
+        "color": "#FFFFFF"
+      },
+      {
+        "type": "text",
+        "text": "วันที่ 07-Feb-2026",
+        "size": "sm",
+        "color": "#FFFFFF",
+        "margin": "xs"
+      },
+      {
+        "type": "text",
+        "text": "อัพเดทเวลา 00:00 น.",
+        "size": "xs",
+        "color": "#FFFFFF",
+        "margin": "xs"
+      }
+    ],
+    "backgroundColor": "#27ACB2",
+    "paddingAll": "20px"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "lg",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "กำลังคนทำงาน",
+                "size": "md",
+                "color": "#555555",
+                "flex": 4,
+                "weight": "bold"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ᴏᴘᴇʀᴀᴛɪᴏɴ ᴍᴀɴᴀɢᴇʀ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 1/1",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ꜱᴇᴄᴛɪᴏɴ ᴍᴀɴᴀɢᴇʀ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟢/𝟣",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ꜱᴜᴘᴇʀᴠɪꜱᴏʀ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟤/𝟥",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ꜱᴇɴɪᴏʀ ᴀᴇᴄ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟣/𝟣",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ᴀᴅᴍɪɴ(ᴏᴘꜱ.)",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟣/𝟤",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ᴅᴏᴄᴋ ᴄᴏɴᴛʀᴏʟ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟤/𝟥",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ʙᴀꜱᴋᴇᴛ ᴄᴏɴᴛʀᴏʟ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟣/𝟣",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ᴘᴀʟʟᴇᴛ/ʀᴏʟʟᴄᴀɢᴇ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟣/𝟤",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ɢʀ ᴡᴇɪɢʜᴛ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟨/𝟣𝟢",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ɢʀ ꜱᴛᴅ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟪/𝟣𝟢",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ᴄʜᴇᴄᴋ 𝟣𝟢𝟢",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟤/𝟥",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ᴘɪᴄᴋᴇʀ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟥𝟢/𝟥𝟧",
+                "size": "xs",
+                "color": "#FF6B6B",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ᴜᴘ ᴛʜᴇ ᴘᴀʟʟᴇᴛ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟦/𝟧",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ᴍᴇʀɢᴇ ʙᴀꜱᴋᴇᴛ",
+                "size": "xs",
+                "color": "#555555",
+                "flex": 4
+              },
+              {
+                "type": "text",
+                "text": "= 𝟣/𝟣",
+                "size": "xs",
+                "color": "#111111",
+                "align": "end",
+                "flex": 2
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "𝗢𝗙𝗙=15 𝗦𝗟=2",
+            "size": "xs",
+            "color": "#555555",
+            "flex": 4,
+            "weight": "regular"
+          }
+        ]
+      },
+      {
+        "type": "separator",
+        "margin": "xl"
+      },
+      {
+        "type": "text",
+        "text": "𝔽𝕣𝕦𝕚𝕥 & 𝕍𝕖𝕘𝕖𝕥𝕒𝕓𝕝𝕖 - 𝔽𝕍",
+        "weight": "bold",
+        "size": "md",
+        "margin": "xl"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "lg",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "เวลาเริ่มงาน",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "𝟭𝟳:𝟬𝟬 น.",
+                "size": "sm",
+                "color": "#111111",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "𝗣𝗹𝗮𝗻 น้ำหนัก",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "𝟭𝟬𝟯,𝟴𝟮𝟭.𝟴𝟯 กก.",
+                "size": "sm",
+                "color": "#111111",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ซัพฯทั้งหมด",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "100 ซัพ",
+                "size": "sm",
+                "color": "#111111",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ซัพฯมาแล้วรวม",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "122 คัน",
+                "size": "sm",
+                "color": "#111111",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "รับงานจบแล้ว",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "100 ซัพ",
+                "size": "sm",
+                "color": "#555555",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "น้ำหนักที่รับแล้ว",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "93,997.91 กก.",
+                "size": "sm",
+                "color": "#555555",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ลงงานจบ",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "22:30 น.",
+                "size": "sm",
+                "color": "#111111",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "QC จบ",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "23:14 น.",
+                "size": "sm",
+                "color": "#111111",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "GR จบ",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "00:06 น.",
+                "size": "sm",
+                "color": "#111111",
+                "align": "end"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "กระจายจบ",
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "00:16 น.",
+                "size": "sm",
+                "color": "#555555",
+                "align": "end"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "horizontal",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "button",
+        "style": "primary",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "DashBoard",
+          "uri": "https://lookerstudio.google.com/reporting/05686840-62b8-4b69-9a9f-e62d5501f181"
+        },
+        "color": "#27ACB2"
+      },
+      {
+        "type": "button",
+        "style": "primary",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "Share",
+          "uri": "https://liff.line.me/2009073203-kPdSUtmr"
+        },
+        "color": "#27ACB2"
+      }
+    ]
+  }
+}
+                    
+                    
+                    
+                    /* Paste your Flex Message JSON here */
+            }])
+            liff.closeWindow()}
+        main();
+    </script>
 </body>
 </html>

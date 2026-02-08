@@ -1,194 +1,129 @@
-// ใส่ LIFF ID ของคุณที่นี่
-const LIFF_ID = '2009073203-kPdSUtmr'; // เช่น '1234567890-abcdefgh'
+// LIFF ID (ใช้ตัวเดิม)
+const LIFF_ID = "2009073203-kPdSUtmr";
 
-let liffInitialized = false;
+// Default/Example JSON (เผื่อคนไม่รู้จะใส่อะไร)
+const DEFAULT_FLEX = {
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "Hello, World!",
+        "weight": "bold",
+        "size": "xl"
+      },
+      {
+        "type": "text",
+        "text": "This is a dynamic Flex Message."
+      }
+    ]
+  }
+};
 
-// เริ่มต้น LIFF เมื่อโหลดหน้าเว็บ
-window.addEventListener('load', async () => {
-    try {
-        await liff.init({ liffId: LIFF_ID });
-        liffInitialized = true;
-        
-        if (!liff.isLoggedIn()) {
-            // ถ้ายังไม่ login ให้ redirect ไป login
-            liff.login();
-            return;
-        }
-        
-        // ดึงข้อมูลโปรไฟล์ผู้ใช้
-        await loadUserProfile();
-        
-        // เพิ่ม event listener ให้ปุ่มส่ง
-        document.getElementById('sendBtn').addEventListener('click', sendFlexMessage);
-        
-        // Update preview เมื่อมีการเปลี่ยนแปลง
-        document.getElementById('title').addEventListener('input', updatePreview);
-        document.getElementById('content').addEventListener('input', updatePreview);
-        document.getElementById('color').addEventListener('input', updatePreview);
-        
-        updatePreview();
-        
-    } catch (error) {
-        console.error('LIFF initialization failed', error);
-        showStatus('error', 'เกิดข้อผิดพลาดในการเริ่มต้นแอป: ' + error.message);
+async function main() {
+  const statusDiv = document.getElementById('status');
+  const profileDiv = document.getElementById('profile');
+  const inputArea = document.getElementById('jsonInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const shareBtn = document.getElementById('shareBtn');
+  const appUI = document.getElementById('appUI');
+  const loadingUI = document.getElementById('loadingUI');
+
+  try {
+    await liff.init({ liffId: LIFF_ID });
+
+    if (!liff.isLoggedIn()) {
+      liff.login();
+      return;
     }
-});
 
-// โหลดข้อมูลผู้ใช้
-async function loadUserProfile() {
-    try {
-        const profile = await liff.getProfile();
-        document.getElementById('userInfo').style.display = 'flex';
-        document.getElementById('userName').textContent = profile.displayName;
-        document.getElementById('userPic').src = profile.pictureUrl;
-        document.getElementById('userStatus').textContent = profile.statusMessage || 'ไม่มีสถานะ';
-    } catch (error) {
-        console.error('Failed to get profile', error);
+    // 1. ดึงข้อมูลโปรไฟล์ (Profile)
+    const profile = await liff.getProfile();
+    // แสดงรูปและชื่อผู้ใช้
+    profileDiv.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                <img src="${profile.pictureUrl}" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #06C755;">
+                <div style="text-align: left;">
+                    <div style="font-size: 12px; color: #888;">Sending as:</div>
+                    <div style="font-weight: bold; font-size: 16px;">${profile.displayName}</div>
+                </div>
+            </div>
+        `;
+
+    // 2. ตั้งค่า Input เริ่มต้น
+    inputArea.value = JSON.stringify(DEFAULT_FLEX, null, 2);
+
+    // 3. ตรวจสอบ Context (เปิดจากไหน)
+    const context = liff.getContext();
+    const isInClient = context && (context.type === 'utou' || context.type === 'group' || context.type === 'room');
+
+    // ปรับ UI ตาม Context
+    if (isInClient) {
+      sendBtn.style.display = 'block';
+      shareBtn.style.display = 'none';
+      statusDiv.innerHTML = '<span style="color: green;">✅ อยู่ในห้องแชท (Ready to Send)</span>';
+    } else {
+      sendBtn.style.display = 'none';
+      shareBtn.style.display = 'block';
+      statusDiv.innerHTML = '<span style="color: orange;">🌐 เปิดจาก Browser (Select Friend to Share)</span>';
     }
-}
 
-// สร้าง Flex Message
-function createFlexMessage(title, content, color) {
-    return {
-        type: 'bubble',
-        size: 'giga',
-        header: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-                {
-                    type: 'text',
-                    text: title,
-                    color: '#ffffff',
-                    size: 'xl',
-                    weight: 'bold'
-                }
-            ],
-            backgroundColor: color,
-            paddingAll: '20px'
-        },
-        body: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-                {
-                    type: 'text',
-                    text: content,
-                    wrap: true,
-                    size: 'md',
-                    color: '#666666'
-                }
-            ],
-            paddingAll: '20px'
-        },
-        footer: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-                {
-                    type: 'button',
-                    action: {
-                        type: 'uri',
-                        label: '🔄 แชร์ข้อความนี้',
-                        uri: `https://liff.line.me/${LIFF_ID}`
-                    },
-                    style: 'primary',
-                    color: color,
-                    height: 'sm'
-                },
-                {
-                    type: 'button',
-                    action: {
-                        type: 'uri',
-                        label: 'ดูข้อมูลเพิ่มเติม',
-                        uri: 'https://line.me'
-                    },
-                    style: 'link',
-                    height: 'sm'
-                }
-            ],
-            spacing: 'sm',
-            paddingAll: '20px'
+    // แสดงผลหน้า UI หลัก
+    loadingUI.style.display = 'none';
+    appUI.style.display = 'block'; // Make sure the container is shown
+
+    // ฟังก์ชันสร้าง Object ข้อความจาก Textarea
+    const createMessages = () => {
+      const raw = inputArea.value;
+      if (!raw.trim()) throw new Error("กรุณาใส่ JSON");
+      const flexContent = JSON.parse(raw);
+
+      // Construct message object
+      return [
+        {
+          type: 'flex',
+          altText: 'Flex Message',
+          contents: flexContent
         }
+      ];
     };
-}
 
-// ส่ง Flex Message ด้วย Share Target Picker
-async function sendFlexMessage() {
-    if (!liffInitialized) {
-        showStatus('error', 'กรุณารอสักครู่...');
-        return;
-    }
+    // 4. ฟังก์ชันส่ง (Send) สำหรับการกดปุ่ม
+    // ต้องแยก Event Listener ออกมาให้ชัดเจน
 
-    const title = document.getElementById('title').value.trim();
-    const content = document.getElementById('content').value.trim();
-    const color = document.getElementById('color').value;
+    sendBtn.addEventListener('click', async () => {
+      try {
+        const messages = createMessages();
+        // ส่งเข้าแชทปัจจุบัน
+        await liff.sendMessages(messages);
+        alert(`ส่งข้อความเรียบร้อย! (Sent as ${profile.displayName})`);
+        liff.closeWindow();
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการส่ง: ' + err.message + '\n\nกรุณาตรวจสอบ JSON ว่าถูกต้องหรือไม่');
+      }
+    });
 
-    if (!title || !content) {
-        showStatus('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
-        return;
-    }
-
-    try {
-        const flexMessage = createFlexMessage(title, content, color);
-        
-        // เช็คว่ารองรับ Share Target Picker หรือไม่
-        if (!liff.isApiAvailable('shareTargetPicker')) {
-            showStatus('error', 'อุปกรณ์นี้ไม่รองรับการแชร์');
-            return;
-        }
-
-        // เปิด Share Target Picker
-        const result = await liff.shareTargetPicker([
-            {
-                type: 'flex',
-                altText: title,
-                contents: flexMessage
-            }
-        ]);
-
-        if (result) {
-            showStatus('success', '✅ ส่งข้อความสำเร็จ!');
+    shareBtn.addEventListener('click', async () => {
+      try {
+        const messages = createMessages();
+        // เลือกเพื่อนส่ง
+        if (liff.isApiAvailable('shareTargetPicker')) {
+          const res = await liff.shareTargetPicker(messages);
+          if (res) liff.closeWindow();
         } else {
-            showStatus('error', 'ยกเลิกการส่ง');
+          alert('Device not supported for Share Target Picker');
         }
-    } catch (error) {
-        console.error('Error sending message:', error);
-        showStatus('error', 'เกิดข้อผิดพลาด: ' + error.message);
-    }
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการแชร์: ' + err.message + '\n\nกรุณาตรวจสอบ JSON ว่าถูกต้องหรือไม่');
+      }
+    });
+
+  } catch (err) {
+    console.error(err);
+    loadingUI.innerHTML = `<p style="color: red;">Error: ${err.message}</p>`;
+  }
 }
 
-// แสดงสถานะ
-function showStatus(type, message) {
-    const statusDiv = document.getElementById('status');
-    statusDiv.className = `status ${type}`;
-    statusDiv.textContent = message;
-    
-    setTimeout(() => {
-        statusDiv.style.display = 'none';
-    }, 3000);
-}
-
-// Update preview
-function updatePreview() {
-    const title = document.getElementById('title').value || 'หัวข้อ';
-    const content = document.getElementById('content').value || 'เนื้อหา';
-    const color = document.getElementById('color').value;
-    
-    const preview = document.getElementById('flexPreview');
-    preview.innerHTML = `
-        <div style="border: 2px solid #ddd; border-radius: 12px; overflow: hidden; max-width: 300px;">
-            <div style="background: ${color}; color: white; padding: 15px; font-weight: bold;">
-                ${title}
-            </div>
-            <div style="padding: 15px; background: white;">
-                ${content}
-            </div>
-            <div style="padding: 10px; background: #f5f5f5;">
-                <button style="width: 100%; padding: 10px; background: ${color}; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    🔄 แชร์ข้อความนี้
-                </button>
-            </div>
-        </div>
-    `;
-}
+main();

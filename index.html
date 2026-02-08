@@ -1,663 +1,102 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINE Flex Message Sender</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Dynamic Flex Sender</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-green {
+            background-color: #06C755;
+            color: white;
+        }
+
+        .btn-blue {
+            background-color: #00B900;
+            color: white;
+        }
+
+        /* Using a different shade/style for share if needed, keeping similar to LINE */
+        .btn-secondary {
+            background-color: #27ACB2;
+            color: white;
+        }
+
+        #loadingUI {
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
 </head>
+
 <body>
+
+    <div id="loadingUI"> กำลังโหลด... (Loading LIFF) </div>
+
+    <div id="appUI" class="container" style="display: none;">
+        <h3>Flex Message Sender</h3>
+
+        <!-- Profile Display -->
+        <div id="profile"></div>
+
+        <!-- Status -->
+        <div id="status" style="margin-bottom: 10px; font-size: 14px;"></div>
+
+        <!-- Input Area -->
+        <div style="text-align: left; margin-bottom: 5px; font-weight: bold;">JSON Code:</div>
+        <textarea id="jsonInput" placeholder="Paste your Flex Message JSON here..."></textarea>
+
+        <!-- Buttons -->
+        <button id="sendBtn" class="btn btn-green" style="display: none;">ส่งข้อความ (Send Now)</button>
+        <button id="shareBtn" class="btn btn-secondary" style="display: none;">เลือกเพื่อนส่ง (Share)</button>
+
+        <div style="margin-top: 20px; font-size: 12px; color: #999;">
+            *คุณสามารถแชร์ Link นี้ให้คนอื่นใช้งานได้<br>
+            *ข้อมูล JSON จะไม่ถูกบันทึก (Client-side only)
+        </div>
+    </div>
+
     <script src="https://static.line-scdn.net/liff/edge/versions/2.5.0/sdk.js"></script>
-    <script>
-        async function main() {
-            await liff.init({ liffId: "2009073203-kPdSUtmr" });
-            await liff.shareTargetPicker([{
-                type: 'flex',
-                altText: 'FV Report',
-                contents: 
-{
-  "type": "bubble",
-  "size": "mega",
-  "header": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "text",
-        "text": "𝗖𝗝 𝗙𝗩 (𝗪𝗔𝗩𝗘𝟭)",
-        "weight": "bold",
-        "size": "xl",
-        "color": "#FFFFFF"
-      },
-      {
-        "type": "text",
-        "text": "วันที่ 07-Feb-2026",
-        "size": "sm",
-        "color": "#FFFFFF",
-        "margin": "xs"
-      },
-      {
-        "type": "text",
-        "text": "อัพเดทเวลา 00:00 น.",
-        "size": "xs",
-        "color": "#FFFFFF",
-        "margin": "xs"
-      }
-    ],
-    "backgroundColor": "#27ACB2",
-    "paddingAll": "20px"
-  },
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "box",
-        "layout": "vertical",
-        "margin": "lg",
-        "spacing": "sm",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "กำลังคนทำงาน",
-                "size": "md",
-                "color": "#555555",
-                "flex": 4,
-                "weight": "bold"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ᴏᴘᴇʀᴀᴛɪᴏɴ ᴍᴀɴᴀɢᴇʀ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 1/1",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ꜱᴇᴄᴛɪᴏɴ ᴍᴀɴᴀɢᴇʀ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟢/𝟣",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ꜱᴜᴘᴇʀᴠɪꜱᴏʀ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟤/𝟥",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ꜱᴇɴɪᴏʀ ᴀᴇᴄ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟣/𝟣",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ᴀᴅᴍɪɴ(ᴏᴘꜱ.)",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟣/𝟤",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ᴅᴏᴄᴋ ᴄᴏɴᴛʀᴏʟ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟤/𝟥",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ʙᴀꜱᴋᴇᴛ ᴄᴏɴᴛʀᴏʟ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟣/𝟣",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ᴘᴀʟʟᴇᴛ/ʀᴏʟʟᴄᴀɢᴇ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟣/𝟤",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ɢʀ ᴡᴇɪɢʜᴛ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟨/𝟣𝟢",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ɢʀ ꜱᴛᴅ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟪/𝟣𝟢",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ᴄʜᴇᴄᴋ 𝟣𝟢𝟢",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟤/𝟥",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ᴘɪᴄᴋᴇʀ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟥𝟢/𝟥𝟧",
-                "size": "xs",
-                "color": "#FF6B6B",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ᴜᴘ ᴛʜᴇ ᴘᴀʟʟᴇᴛ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟦/𝟧",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ᴍᴇʀɢᴇ ʙᴀꜱᴋᴇᴛ",
-                "size": "xs",
-                "color": "#555555",
-                "flex": 4
-              },
-              {
-                "type": "text",
-                "text": "= 𝟣/𝟣",
-                "size": "xs",
-                "color": "#111111",
-                "align": "end",
-                "flex": 2
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "𝗢𝗙𝗙=15 𝗦𝗟=2",
-            "size": "xs",
-            "color": "#555555",
-            "flex": 4,
-            "weight": "regular"
-          }
-        ]
-      },
-      {
-        "type": "separator",
-        "margin": "xl"
-      },
-      {
-        "type": "text",
-        "text": "𝔽𝕣𝕦𝕚𝕥 & 𝕍𝕖𝕘𝕖𝕥𝕒𝕓𝕝𝕖 - 𝔽𝕍",
-        "weight": "bold",
-        "size": "md",
-        "margin": "xl"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "margin": "lg",
-        "spacing": "sm",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "เวลาเริ่มงาน",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "𝟭𝟳:𝟬𝟬 น.",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "𝗣𝗹𝗮𝗻 น้ำหนัก",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "𝟭𝟬𝟯,𝟴𝟮𝟭.𝟴𝟯 กก.",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ซัพฯทั้งหมด",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "100 ซัพ",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ซัพฯมาแล้วรวม",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "122 คัน",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "รับงานจบแล้ว",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "100 ซัพ",
-                "size": "sm",
-                "color": "#555555",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "น้ำหนักที่รับแล้ว",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "93,997.91 กก.",
-                "size": "sm",
-                "color": "#555555",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ลงงานจบ",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "22:30 น.",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "QC จบ",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "23:14 น.",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "GR จบ",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "00:06 น.",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "กระจายจบ",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": "00:16 น.",
-                "size": "sm",
-                "color": "#555555",
-                "align": "end"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  "footer": {
-    "type": "box",
-    "layout": "horizontal",
-    "spacing": "sm",
-    "contents": [
-      {
-        "type": "button",
-        "style": "primary",
-        "height": "sm",
-        "action": {
-          "type": "uri",
-          "label": "DashBoard",
-          "uri": "https://lookerstudio.google.com/reporting/05686840-62b8-4b69-9a9f-e62d5501f181"
-        },
-        "color": "#27ACB2"
-      },
-      {
-        "type": "button",
-        "style": "primary",
-        "height": "sm",
-        "action": {
-          "type": "uri",
-          "label": "Share",
-          "uri": "https://liff.line.me/2009073203-kPdSUtmr"
-        },
-        "color": "#27ACB2"
-      }
-    ]
-  }
-}
-                    
-                    
-                    
-                    /* Paste your Flex Message JSON here */
-            }])
-            liff.closeWindow()}
-        main();
-    </script>
+    <script src="script.js"></script>
 </body>
+
 </html>
